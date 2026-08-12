@@ -71,7 +71,7 @@ st.markdown("""
 st.markdown("""
     <div class="main-header">
         <h2>⚡ E-DIAGNOSTIK kWh METER</h2>
-        <p>Layanan Edukasi & Diagnostik Kelistrikan Mandiri — PLN UP3</p>
+        <p>Layanan Edukasi & Diagnostik Kelistrikan Mandiri — PLN</p>
     </div>
 """, unsafe_allow_html=True)
 
