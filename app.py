@@ -3,25 +3,31 @@ import streamlit as st
 # Config Halaman
 st.set_page_config(page_title="E-Diagnostik PLN UP3", page_icon="⚡", layout="centered")
 
-# Header Visual Khas PLN
-st.markdown("<h1 style='color: #005A9C;'>⚡ E-Diagnostik kWh Meter</h1>", unsafe_allow_html=True)
-st.markdown("<h4 style='color: #FFB800;'>Layanan Edukasi & Diagnostik Kelistrikan Mandiri - PLN UP3</h4>", unsafe_allow_html=True)
+# Header & Logo PLN (Tampil Paling Atas di Layar HP)
+col_logo, col_text = st.columns([1, 3])
+with col_logo:
+    st.image("https://upload.wikimedia.org/wikipedia/commons/2/20/LOGO_PLN.png", width=80)
+with col_text:
+    st.markdown("<h2 style='color: #005A9C; margin:0;'>⚡ E-Diagnostik PLN</h2>", unsafe_allow_html=True)
+    st.caption("Layanan Edukasi & Diagnostik Kelistrikan Mandiri - PLN UP3")
+
 st.markdown("---")
 
-# Sidebar Navigasi
-st.sidebar.image("https://upload.wikimedia.org/wikipedia/commons/2/20/LOGO_PLN.png", width=120)
-st.sidebar.title("Navigasi Utama")
-menu = st.sidebar.selectbox("Pilih Fitur / Layanan:", [
-    "🔍 Cek Beban & Status MCB", 
-    "🕵️‍♂️ Deteksi Kebocoran Arus", 
-    "📈 Simulasi Tambah Daya", 
-    "📖 Kamus Kode Meteran"
+# Petunjuk Awal untuk Orang Awam
+st.write("👇 **Pilih menu layanan yang Anda butuhkan di bawah ini:**")
+
+# TAB NAVIGASI UTAMA (Langsung Terlihat & Mudah Di-tap dari HP)
+tab1, tab2, tab3, tab4 = st.tabs([
+    "🔍 Cek Beban", 
+    "🕵️ Kebocoran Arus", 
+    "📈 Tambah Daya", 
+    "📖 Kode Meteran"
 ])
 
-# MENU 1: CEK BEBAN
-if menu == "🔍 Cek Beban & Status MCB":
+# --- TAB 1: CEK BEBAN ---
+with tab1:
     st.subheader("🔍 Cek Beban Listrik Real-Time")
-    st.info("Fitur ini menghitung persentase beban aktual rumah Anda menggunakan data kode meteran prabayar.")
+    st.info("Fitur ini menghitung persentase beban aktual rumah Anda menggunakan data dari kode meteran prabayar.")
     
     daya_kontrak = st.select_slider("Pilih Daya Terpasang Rumah (VA):", options=[450, 900, 1300, 2200, 3500, 4400, 5500, 6600], value=900)
     
@@ -46,32 +52,32 @@ if menu == "🔍 Cek Beban & Status MCB":
     else:
         st.success("✅ STATUS: AMAN. Beban listrik dalam kapasitas normal.")
 
-# MENU 2: KEBOCORAN ARUS
-elif menu == "🕵️‍♂️ Deteksi Kebocoran Arus":
+# --- TAB 2: KEBOCORAN ARUS ---
+with tab2:
     st.subheader("🕵️‍♂️ Detektif Kebocoran Arus Tanah")
-    st.write("Ikuti petunjuk untuk mengecek adanya kebocoran instalasi internal:")
-    st.markdown("1. Matikan seluruh sakelar MCB di dalam rumah.\n2. Ketik **44#** atau **44 Enter** pada meteran.\n3. Masukkan angka arus yang tertera:")
+    st.write("Ikuti petunjuk untuk mengecek adanya kebocoran instalasi internal rumah Anda:")
+    st.markdown("1. Matikan seluruh sakelar MCB di dalam rumah.\n2. Ketik **44#** atau **44 Enter** pada meteran.\n3. Masukkan angka arus yang tertera di bawah ini:")
     
     arus_bocor = st.number_input("Arus Terbaca (Ampere):", value=0.0, step=0.01)
-    if st.button("Jalankan Analisis"):
+    if st.button("Jalankan Analisis Kebocoran"):
         if arus_bocor > 0.05:
-            st.error(f"🚨 Terdeteksi Kebocoran Arus sebesar {arus_bocor} A! Segera periksa instalasi kabel rumah Anda.")
+            st.error(f"🚨 Terdeteksi Kebocoran Arus sebesar {arus_bocor} A! Segera periksa kabel instalasi rumah Anda.")
         else:
             st.success("✅ Instalasi Aman. Tidak ada arus yang bocor ke tanah.")
 
-# MENU 3: SIMULASI TAMBAH DAYA
-elif menu == "📈 Simulasi Tambah Daya":
+# --- TAB 3: SIMULASI TAMBAH DAYA ---
+with tab3:
     st.subheader("📈 Kalkulator & Simulasi Tambah Daya")
     d_awal = st.selectbox("Daya Saat Ini (VA):", [450, 900, 1300, 2200])
     d_tujuan = st.selectbox("Daya Target (VA):", [1300, 2200, 3500, 4400, 5500])
     if d_tujuan > d_awal:
         st.success(f"Peningkatan kapasitas daya sebesar {d_tujuan - d_awal} VA akan membuat penggunaan alat elektronik lebih leluasa tanpa khawatir MCB anjlok.")
-        st.info("💡 Buka aplikasi PLN Mobile untuk mengecek program diskon promo Tambah Daya terbaru!")
+        st.info("💡 Buka aplikasi **PLN Mobile** untuk mengecek program diskon promo Tambah Daya terbaru!")
 
-# MENU 4: KAMUS KODE
-elif menu == "📖 Kamus Kode Meteran":
+# --- TAB 4: KAMUS KODE METERAN ---
+with tab4:
     st.subheader("📖 Kamus Short Code Meteran Prabayar")
-    merek = st.radio("Pilih Merek Meteran:", ["Itron", "Hexing", "Glomet / Sanxing"])
+    merek = st.radio("Pilih Merek Meteran Rumah Anda:", ["Itron", "Hexing", "Glomet / Sanxing"], horizontal=True)
     if merek == "Itron":
         st.table({"Kode": ["41", "44", "47", "09"], "Fungsi": ["Cek Voltase (V)", "Cek Arus (A)", "Cek Daya (W)", "Cek Daya Terakhir Anjlok"]})
     elif merek == "Hexing":
