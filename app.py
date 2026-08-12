@@ -1,7 +1,7 @@
 import streamlit as st
 
 # 1. Konfigurasi Halaman
-st.set_page_config(page_title="E-Diagnostik PLN UP3", page_icon="⚡", layout="centered")
+st.set_page_config(page_title="E-Diagnostik PLN", page_icon="⚡", layout="centered")
 
 # 2. CSS ADAPTIF (Mendukung Light & Dark Mode Otomatis)
 st.markdown("""
